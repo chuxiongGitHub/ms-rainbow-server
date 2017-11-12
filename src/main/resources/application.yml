@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: rainbow-server
+  datasource:
+    url: jdbc:mysql://localhost:13306/rainbow_test
+    username: root
+    password: admin123
+    driver-class-name: org.mariadb.jdbc.Driver
+    druid:
+      initial-size: 1
+      min-idle: 1
+      max-active: 10
+      max-wait: 30000
+      min-evictable-idle-time-millis: 1800000
+      max-evictable-idle-time-millis: 25200000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      max-open-prepared-statements: 20
+      use-global-data-source-stat: true
+      keep-alive: true
+      filters: mergeStat,wall
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+        wall:
+          config:
+            delete-allow: false
+      stat-view-servlet:
+        login-username: rainbow
+        login-password: admin123
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+
+  redis:
+    url: redis://localhost:6379
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  global-config:
+    meta-object-handler: com.rainbow.ms.commons.SuperMetaObjectHandler
