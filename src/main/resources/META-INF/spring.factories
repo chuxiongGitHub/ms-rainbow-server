@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.rainbow.ms.commons.MybatisPlusConfig,\
+  com.rainbow.ms.commons.ErrorHandler
