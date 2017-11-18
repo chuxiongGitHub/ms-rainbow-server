@@ -38,7 +38,13 @@ class AuthFilter : OncePerRequestFilter() {
         try {
             SecurityContextHolder.getContext().authentication = UserAuthenticationToken(getClient(request))
 
-            val user =
+            val user = getUser(request)
+            if (user != null) {
+                SecurityContextHolder.getContext().authentication = UserAuthenticationToken(getClient(request), user)
+            }
+            filterChain.doFilter(request, response)
+        } catch (ex: Exception) {
+            errorHandler.handle(ex, response)
         }
     }
 
@@ -46,17 +52,24 @@ class AuthFilter : OncePerRequestFilter() {
     private fun getUser(request: HttpServletRequest): User? {
         val token = request.getHeader("Authorization") ?: return null
 
-        val user = authService.
+        val user = authService.loadUserByToken(token) ?: return null
+
+        preAuthenticationChecks(user)
+
+        return user
     }
 
-    private fun getClient(request: HttpServletRequest): Client? {
+    private fun getClient(request: HttpServletRequest): Client {
         val clientId = getHeader(request, "X-AUTH-CLIENT")
 
         val client = clientService.loadClientByClientId(clientId) ?: throw BadCredentialsException("无效的X-AUTH-CLIENT请求头")
 
         preAuthenticationChecks(client)
 
-        if (!client.clientSecret.isNullOrBlank())
+        if (!client.clientSecret.isNullOrBlank()) {
+            additionalAuthenticationChecks(client, request)
+        }
+        return client
     }
 
     private fun getHeader(request: HttpServletRequest, header: String) =

@@ -23,6 +23,5 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .anyRequest().authenticated()
 
         http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter::class.java)
-        super.configure(http)
     }
 }
