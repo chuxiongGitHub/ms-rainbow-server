@@ -8,12 +8,12 @@ data class UserAuthenticationToken(
         val client: Client? = null,
 
         private val principal: User? = null
-) : AbstractAuthenticationToken(principal!!.authorities) {
+) : AbstractAuthenticationToken(principal?.authorities) {
     init {
         isAuthenticated = true
     }
 
-    override fun getCredentials() = principal!!.password
+    override fun getCredentials() = principal?.password
 
     override fun getPrincipal() = principal
 }

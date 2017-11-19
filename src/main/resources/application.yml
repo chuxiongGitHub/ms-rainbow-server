@@ -42,3 +42,5 @@ mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
   global-config:
     meta-object-handler: com.rainbow.ms.commons.SuperMetaObjectHandler
+  configuration:
+    cache-enabled: true
